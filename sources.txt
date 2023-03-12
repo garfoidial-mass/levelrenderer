@@ -2,9 +2,10 @@ i used these libraries for the 3d rendering, input, and windowing:
 https://github.com/veandco/go-sdl2
 https://github.com/go-gl/gl/v2.1/gl
 
-i used these examples to get started on the program (setting up opengl and windowing):
+i used these examples to get started on the program (setting up opengl, windowing, loading textures):
 https://github.com/veandco/go-sdl2#examples
 https://github.com/veandco/go-sdl2-examples/blob/29a79b36df6da7ecbcb99360a99f9e71a3cf6413/examples/opengl/opengl.go
+http://www.sdltutorials.com/sdl-tip-sdl-surface-to-opengl-texture
 
 i used the sdl2 documentation as well:
 https://wiki.libsdl.org/SDL2/APIByCategory
