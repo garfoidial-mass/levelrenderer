@@ -7,6 +7,7 @@ https://github.com/veandco/go-sdl2#examples
 https://github.com/veandco/go-sdl2-examples/blob/29a79b36df6da7ecbcb99360a99f9e71a3cf6413/examples/opengl/opengl.go
 http://www.sdltutorials.com/sdl-tip-sdl-surface-to-opengl-texture
 
-i used the sdl2 documentation as well:
+docs:
 https://wiki.libsdl.org/SDL2/APIByCategory
 https://wiki.libsdl.org/SDL2/CategoryAPI
+https://registry.khronos.org/OpenGL-Refpages/gl2.1

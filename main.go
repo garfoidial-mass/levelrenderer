@@ -50,7 +50,7 @@ func testErr(err error) {
 var textures map[string]*Texture
 var renderer *sdl.Renderer
 
-func loadTexture(filepath string, texname string) {
+func loadTexture(filepath string, texname string) { // partially from http://www.sdltutorials.com/sdl-tip-sdl-surface-to-opengl-texture
 	newsurf, err := img.Load(filepath)
 	testErr(err)
 	texture := new(Texture)
@@ -63,10 +63,13 @@ func loadTexture(filepath string, texname string) {
 
 	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, texture.surface.W, texture.surface.H, 0, gl.RGBA, gl.UNSIGNED_BYTE, texture.surface.Data())
 
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 	textures[texname] = texture
 }
+
+var time uint64
+var deltatime uint64
 
 func main() {
 	fmt.Println("help")
@@ -101,14 +104,23 @@ func main() {
 	gl.ClearColor(0, 0, 0, 0)
 	gl.DepthFunc(gl.LEQUAL)
 	gl.Viewport(0, 0, 800, 600)
+
+	gl.MatrixMode(gl.PROJECTION)
+	gl.LoadIdentity()
+	gl.Frustum(-0.1, 0.1, -0.1, 0.1, 0.1, 100)
+	gl.MatrixMode(gl.MODELVIEW)
+
 	gl.ActiveTexture(gl.TEXTURE0)
 
-	loadTexture("abe.jpg", "ALENA")
+	loadTexture("templesky.gif", "ALENA")
 	gl.BindTexture(gl.TEXTURE_2D, textures["ALENA"].id)
 	testErr(err)
-
+	lasttime := uint64(0)
+	time := sdl.GetTicks64()
 	running := true
 	for running {
+		time = sdl.GetTicks64()
+		deltatime = time - lasttime
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
 			case *sdl.QuitEvent:
@@ -120,6 +132,7 @@ func main() {
 		}
 		draw()          // render the 3d scene on screen
 		window.GLSwap() //rendering is double buffered, so you have to swap them to get the new image displayed
+		lasttime = time
 
 	}
 	sdl.GLDeleteContext(context)
@@ -127,8 +140,15 @@ func main() {
 	sdl.Quit()
 }
 
+var angle float32 = 0
+
 func draw() {
 	gl.Clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT)
+	gl.MatrixMode(gl.MODELVIEW)
+	gl.LoadIdentity()
+	gl.Translatef(0, 0, -4)
+	gl.Rotatef(angle, 0, 1, 0)
+	angle += 0.1
 	gl.Begin(gl.TRIANGLES)
 	gl.TexCoord2f(0, 1)
 	//gl.Color3f(0.1, 1.0, 0.5)
